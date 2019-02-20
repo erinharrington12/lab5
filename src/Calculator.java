@@ -40,19 +40,22 @@ public class Calculator {
 		// TODO: complete this...
 		int result = 0;
 
+		if (tokens[0].equals("halve")) {
+
+			result = a / 2;
+
+		}
 		if (tokens[0].equals("negate")) {
 
 			result = a * -1;
 
-		} else if (tokens[0].equals("halve")) {
-
-			result = a / 2;
 		}
 
-		if (!(tokens[0].contentEquals("negate") || tokens[0].equals("halve"))) {
-			System.out.println("Calculator Exception, message is: Illegal Command");
+		if (!(tokens[0].equals("negate")) && !(tokens[0].contentEquals("halve"))) {
+
 			throw new CalculatorException("Illegal Command");
 		}
+
 		return result;
 
 	}
@@ -104,8 +107,8 @@ public class Calculator {
 			result = token1 / token2;
 		}
 
-		if (!(tokens[1].contentEquals("+")) || !(tokens[0].equals("-")) || !(tokens[1].equals("/"))) {
-			System.out.println("Calculator Exception, message is: Illegal Command");
+		if (!(operator.equals("+")) && !(operator.contentEquals("-")) && !(operator.contentEquals("/"))) {
+
 			throw new CalculatorException("Illegal Command");
 		}
 
@@ -151,26 +154,26 @@ public class Calculator {
 		// Condition on the number of tokens (number of strings in user input separated
 		// by spaces)
 
-		switch (tokens.length) {
-		// TODO: complete this...
-		case 0:
-			throw new CalculatorException("Illegal Token Length");
-		case 1:
-			if (tokens[0].equals("quit")) {
-				return Integer.MIN_VALUE;
-			} else {
-				throw new CalculatorException("Illegal Command");
-			}
-		case 2:
-			return Calculator.calculateTwoTokens(tokens);
-		case 3:
-			return Calculator.calculateThreeTokens(tokens);
-		case 4:
-			throw new CalculatorException("Illegal Token Length");
+		int total = 0;
 
+		if (tokens[0].contentEquals("quit")) {
+			total = Integer.MIN_VALUE;
+
+		} else if (tokens.length == 1) {
+			System.out.println("WRONG");
 		}
 
-		return tokens.length;
+		if (tokens.length == 2) {
+			total = Calculator.calculateTwoTokens(tokens);
+		}
+
+		if (tokens.length == 3) {
+			total = Calculator.calculateThreeTokens(tokens);
+		} else if (tokens.length >= 4) {
+			throw new CalculatorException("Illegal Token Length");
+		}
+
+		return total;
 
 	}
 
@@ -210,30 +213,22 @@ public class Calculator {
 		// method will catch those exceptions and respond accordingly.
 		String[] tokenParse = input.split(" ");
 
-		String blank = "";
 		try {
-			execute(tokenParse);
-			
-//			if (execute(tokenParse) == 1) {
-//				break;
-//			} else if (tokenParse.length == 2) {
-//				return String.format("The result is: %d", execute(tokenParse));
-//			} 
-			
+			int choice = execute(tokenParse);
+
+			return String.format("The result is: %d", choice);
+
 		} catch (NumberFormatException e) {
 			return "Input number cannot be parsed to an int. Please try again.";
+		}
 
-		} catch (CalculatorException IC) {
-			return String.format("Calculator Exception, message is: %s", "Illegal Command");
+		catch (CalculatorException e) {
 
+			return String.format("Calculator Exception, message is: %s", e.getMessage());
 		} catch (ArithmeticException e) {
 			return "Attempted to divide by 0. Please try again.";
 
-		} 
-		return blank;
-//			catch (CalculatorException ITL) {
-//			return String.format("Calculator Exception, message is: %s", "Illegal Token Length");
-//		}
+		}
 
 	}
 }
