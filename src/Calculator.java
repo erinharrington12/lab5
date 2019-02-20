@@ -155,12 +155,13 @@ public class Calculator {
 		// by spaces)
 
 		int total = 0;
+		
 
 		if (tokens[0].contentEquals("quit")) {
 			total = Integer.MIN_VALUE;
 
 		} else if (tokens.length == 1) {
-			System.out.println("WRONG");
+			throw new CalculatorException("Illegal Command");
 		}
 
 		if (tokens.length == 2) {
