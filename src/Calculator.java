@@ -93,9 +93,9 @@ public class Calculator {
 		int token1 = Integer.parseInt(tokens[0]);
 		String operator = tokens[1];
 		int token2 = Integer.parseInt(tokens[2]);
-		
+
 		int result = 0;
-		
+
 		if (operator.contentEquals("+")) {
 			result = token1 + token2;
 		} else if (operator.equals("-")) {
@@ -103,12 +103,12 @@ public class Calculator {
 		} else if (operator.contentEquals("/")) {
 			result = token1 / token2;
 		}
-		
+
 		if (!(tokens[1].contentEquals("+")) || !(tokens[0].equals("-")) || !(tokens[1].equals("/"))) {
 			System.out.println("Calculator Exception, message is: Illegal Command");
 			throw new CalculatorException("Illegal Command");
 		}
-		
+
 		return result;
 	}
 
@@ -150,56 +150,90 @@ public class Calculator {
 	protected static int execute(String[] tokens) throws NumberFormatException, CalculatorException {
 		// Condition on the number of tokens (number of strings in user input separated
 		// by spaces)
+
 		switch (tokens.length) {
 		// TODO: complete this...
+		case 0:
+			throw new CalculatorException("Illegal Token Length");
+		case 1:
+			if (tokens[0].equals("quit")) {
+				return Integer.MIN_VALUE;
+			} else {
+				throw new CalculatorException("Illegal Command");
+			}
+		case 2:
+			return Calculator.calculateTwoTokens(tokens);
+		case 3:
+			return Calculator.calculateThreeTokens(tokens);
+		case 4:
+			throw new CalculatorException("Illegal Token Length");
 
 		}
+
+		return tokens.length;
 
 	}
 
 	/**
-     * Method to split up the user input. "Tokenizes" (converts a large string into string chunks) by splitting the
-     * input string on spaces. The tokenized input is passed to execute to be processed. If the input is bad, execute
-     * will throw an exception. If the input is valid, an int value will be returned. An int value of Integer.MIN_VALUE
-     * is returned by execute if the program should quit.
-     *
-     * This method handles the exceptions thrown by execute. The string returned by this method is the final result
-     * of processing a user input, whether it be a valid or invalid command.
-     *
-     * Valid commands are:
-     * "quit" - the program should quit
-     * "+" - two numbers should be added
-     * "-" - a number should be subtracted from another
-     * "/" - a number should be divided by another
-     *
-     * @param input A String possibly containing a calculator command. Tokens of the command are separated by space.
-     * e.g. A valid command would be "50 + 20". This will be split up (Tokenized) as an array of three Strings:
-     * ["50", "+", "20"].
-     * @return The following values are returned under the given conditions:
-     * (1) "quit" - if the program should end
-     * (2) "The result is: %d", where %d is replaced with the returned value of execute(tokens) - the command is
-     * executed correctly and is not "quit".
-     * (3) "Attempted to divide by 0. Please try again." - an ArithmeticException has been caught.
-     * (4) "Input number cannot be parsed to an int. Please try again." - a NumberFormat has been caught.
-     * (5) "Calculator Exception, message is: %s", where %s is the message of a
-     * CalculatorException - a CalculatorException has been caught.
-     */
-    public static String parseAndExecute(String input)
-    {
-        // TODO: complete this...
-        // Hint: you should try and call execute(). If execute encounters an error, it will throw an exception. This
-        // method will catch those exceptions and respond accordingly.
-    	String[] tokens = input.split(" ");
-    	String firstToken = tokens[0];
-    	String secondToken = tokens[1];
-    	String thirdToken = tokens[2];
-    	
-    	execute(tokens);
-    	
-    	do {
-    		try {
-    			
-    		}
-    	} while (input != null);
-    }
+	 * Method to split up the user input. "Tokenizes" (converts a large string into
+	 * string chunks) by splitting the input string on spaces. The tokenized input
+	 * is passed to execute to be processed. If the input is bad, execute will throw
+	 * an exception. If the input is valid, an int value will be returned. An int
+	 * value of Integer.MIN_VALUE is returned by execute if the program should quit.
+	 *
+	 * This method handles the exceptions thrown by execute. The string returned by
+	 * this method is the final result of processing a user input, whether it be a
+	 * valid or invalid command.
+	 *
+	 * Valid commands are: "quit" - the program should quit "+" - two numbers should
+	 * be added "-" - a number should be subtracted from another "/" - a number
+	 * should be divided by another
+	 *
+	 * @param input A String possibly containing a calculator command. Tokens of the
+	 *              command are separated by space. e.g. A valid command would be
+	 *              "50 + 20". This will be split up (Tokenized) as an array of
+	 *              three Strings: ["50", "+", "20"].
+	 * @return The following values are returned under the given conditions: (1)
+	 *         "quit" - if the program should end (2) "The result is: %d", where %d
+	 *         is replaced with the returned value of execute(tokens) - the command
+	 *         is executed correctly and is not "quit". (3) "Attempted to divide by
+	 *         0. Please try again." - an ArithmeticException has been caught. (4)
+	 *         "Input number cannot be parsed to an int. Please try again." - a
+	 *         NumberFormat has been caught. (5) "Calculator Exception, message is:
+	 *         %s", where %s is the message of a CalculatorException - a
+	 *         CalculatorException has been caught.
+	 */
+	public static String parseAndExecute(String input) {
+		// TODO: complete this...
+		// Hint: you should try and call execute(). If execute encounters an error, it
+		// will throw an exception. This
+		// method will catch those exceptions and respond accordingly.
+		String[] tokenParse = input.split(" ");
+
+		String blank = "";
+		try {
+			execute(tokenParse);
+			
+//			if (execute(tokenParse) == 1) {
+//				break;
+//			} else if (tokenParse.length == 2) {
+//				return String.format("The result is: %d", execute(tokenParse));
+//			} 
+			
+		} catch (NumberFormatException e) {
+			return "Input number cannot be parsed to an int. Please try again.";
+
+		} catch (CalculatorException IC) {
+			return String.format("Calculator Exception, message is: %s", "Illegal Command");
+
+		} catch (ArithmeticException e) {
+			return "Attempted to divide by 0. Please try again.";
+
+		} 
+		return blank;
+//			catch (CalculatorException ITL) {
+//			return String.format("Calculator Exception, message is: %s", "Illegal Token Length");
+//		}
+
+	}
 }
