@@ -39,6 +39,7 @@ public class Calculator {
 		int a = Integer.parseInt(tokens[1]); // Throws NumberFormatException if the second token is not an int value.
 		// TODO: complete this...
 		int result = 0;
+
 		if (tokens[0].equals("negate")) {
 
 			result = a * -1;
@@ -46,9 +47,12 @@ public class Calculator {
 		} else if (tokens[0].equals("halve")) {
 
 			result = a / 2;
-
 		}
 
+		if (!(tokens[0].contentEquals("negate") || tokens[0].equals("halve"))) {
+			System.out.println("Calculator Exception, message is: Illegal Command");
+			throw new CalculatorException("Illegal Command");
+		}
 		return result;
 
 	}
@@ -85,6 +89,27 @@ public class Calculator {
 	protected static int calculateThreeTokens(String[] tokens)
 			throws ArithmeticException, NumberFormatException, CalculatorException {
 		// TODO: complete this...
+
+		int token1 = Integer.parseInt(tokens[0]);
+		String operator = tokens[1];
+		int token2 = Integer.parseInt(tokens[2]);
+		
+		int result = 0;
+		
+		if (operator.contentEquals("+")) {
+			result = token1 + token2;
+		} else if (operator.equals("-")) {
+			result = token1 - token2;
+		} else if (operator.contentEquals("/")) {
+			result = token1 / token2;
+		}
+		
+		if (!(tokens[1].contentEquals("+")) || !(tokens[0].equals("-")) || !(tokens[1].equals("/"))) {
+			System.out.println("Calculator Exception, message is: Illegal Command");
+			throw new CalculatorException("Illegal Command");
+		}
+		
+		return result;
 	}
 
 	/**
@@ -143,8 +168,6 @@ public class Calculator {
      *
      * Valid commands are:
      * "quit" - the program should quit
-     * "increment" - an int should be incremented by 1
-     * "decrement" - an int should be decremented by 1
      * "+" - two numbers should be added
      * "-" - a number should be subtracted from another
      * "/" - a number should be divided by another
@@ -166,12 +189,12 @@ public class Calculator {
         // TODO: complete this...
         // Hint: you should try and call execute(). If execute encounters an error, it will throw an exception. This
         // method will catch those exceptions and respond accordingly.
-    	String[] tokenList = input.split(" ");
-    	String firstToken = tokenList[0];
-    	String secondToken = tokenList[1];
-    	String thirdToken = tokenList[2];
+    	String[] tokens = input.split(" ");
+    	String firstToken = tokens[0];
+    	String secondToken = tokens[1];
+    	String thirdToken = tokens[2];
     	
-    	execute(tokenList);
+    	execute(tokens);
     	
     	do {
     		try {
